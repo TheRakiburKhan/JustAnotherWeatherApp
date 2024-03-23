@@ -13,12 +13,6 @@ struct CurrentWeatherView: View {
     @StateObject var viewModel: CurrentWeatherViewModel = .init()
     
     let amountToPullBeforeRefreshing: CGFloat = 180
-    func refreshData() async {
-        // do work to asyncronously refresh your data here
-        if let location = await LocationService.shared.getCurrentLocation() {
-            await viewModel.fetchCurrentWeather(lat: location.latitude, lon: location.longitude)
-        }
-    }
     
     var body: some View {
         ScrollView {
@@ -78,9 +72,17 @@ struct CurrentWeatherView: View {
             }
         }
         .task {
-            if let location = await LocationService.shared.getCurrentLocation() {
-                await viewModel.fetchCurrentWeather(lat: location.latitude, lon: location.longitude)
-            }
+            await fetchCurrentWeatherData()
+        }
+    }
+    
+    func refreshData() async {
+        await fetchCurrentWeatherData()
+    }
+    
+    func fetchCurrentWeatherData() async {
+        if let location = await LocationService.shared.getCurrentLocation() {
+            await viewModel.fetchCurrentWeather(lat: location.latitude, lon: location.longitude)
         }
     }
 }

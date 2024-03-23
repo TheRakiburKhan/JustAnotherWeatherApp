@@ -7,7 +7,6 @@
 
 import UIKit
 import CoreLocation
-//import BeedaAlertBase
 
 class LocationService: NSObject, ObservableObject {
     static let shared = LocationService()
@@ -43,11 +42,7 @@ class LocationService: NSObject, ObservableObject {
                     await utility.resetAlert()
                     
                 @unknown default:
-#if DEBUG
-                    fatalError("New location authorization status that needed implementation")
-#else
                     break
-#endif
             }
         } else {
             await locationSettingsAlert()
